@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<bean id="messaging" class="com.pradeip.spring.MessagingImpl" />
+
+	<!-- How do you define setter based injection -->
+	<bean id="communication" class="com.pradeip.spring.Communication">
+		<property name="messaging">
+			<ref bean="messaging" />
+		</property>
+		<!-- set value or pass refrence -->
+		<!-- <property name="inValue"> -->
+		<!-- <value>50</value> -->
+		<!-- </property> -->
+	</bean>
+	<!-- Definition for textEditor bean -->
+	<!-- define constructor based injection -->
+	<bean id="textEditor" class="com.pradeip.spring.TextEditor">
+		<constructor-arg ref="spellChecker" />
+		<constructor-arg value="56" />
+	</bean>
+	<!-- Definition for spellChecker bean -->
+	<bean id="spellChecker" class="com.pradeip.spring.SpellChecker"></bean>
+	<import resource="hibernate-config.xml" />
+	<bean id="hibernate4AnnotatedSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.pradeip.hibernate.Student</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.show_sql">false</prop>
+			</props>
+		</property>
+	</bean>
+</beans>
