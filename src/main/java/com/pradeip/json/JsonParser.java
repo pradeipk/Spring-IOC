@@ -19,10 +19,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonParserExample {
+public class JsonParser {
 
 	static final String PATH = "path";
-	static  String PATH_VALUE = "path";
+	static String PATH_VALUE = "path";
 	static final String STATEMENTMAP = "statementMap";
 	static final String S = "s";
 	static final String FNMAP = "fnMap";
@@ -51,13 +51,7 @@ public class JsonParserExample {
 		String[] pathList = { file01, file02 };
 		List<Map<String, Object>> list = ReadFile.readJSON(Arrays
 				.asList(pathList));
-
-		// List<List<String>> nestedKeys = new ArrayList<List<String>>();
-		// ReadFile.printAllKeys(list, nestedKeys);
-
-		// System.out.println(nestedKeys.toString());
-		ReadFile.mergeMultipleMaps(list);
-
+		ReadFiles.mergeMultipleMaps(list);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.writeValue(new File(file03), finalMap);
 		System.out.println(finalMap);
@@ -65,7 +59,7 @@ public class JsonParserExample {
 	}
 }
 
-class ReadFile extends JsonParserExample {
+class ReadFiles extends JsonParser {
 
 	static List<Map<String, Object>> readJSON(List<String> pathList) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -125,9 +119,7 @@ class ReadFile extends JsonParserExample {
 			for (String string : keys) {
 
 				if (string.equals("b")) {
-
 				}
-
 				System.out.println("Printing Key :" + string);
 				innerList.add(string);
 				printKeys(((Map<String, Object>) value).get(string), list);
@@ -168,21 +160,15 @@ class ReadFile extends JsonParserExample {
 		rootKeys = new HashSet<String>();
 
 		for (Map<String, Object> mapone : list) {
-
 			for (String key : mapone.keySet()) {
 				rootKeys.add(key);
 			}
-
 		}
 
 		System.out.println("Keys :" + rootKeys);
-
 		for (String key : rootKeys) {
-
 			Map<String, Object> tempMap = new HashMap<String, Object>();
-			
 			for (Map<String, Object> mapone : list) {
-
 				tempMap = (Map<String, Object>) mapone.get(key);
 
 				smpMap.putAll((Map<? extends String, ? extends Object>) tempMap
@@ -197,8 +183,8 @@ class ReadFile extends JsonParserExample {
 						.get(BRANCH_MAP));
 				bMap.putAll((Map<? extends String, ? extends Object>) tempMap
 						.get(B));
-				PATH_VALUE =  (String) tempMap.get(PATH);
-				
+				PATH_VALUE = (String) tempMap.get(PATH);
+
 				System.out.println(tempMap.get(PATH));
 				System.out.println(pathMap);
 
@@ -212,15 +198,6 @@ class ReadFile extends JsonParserExample {
 			innerMap.put(B, bMap);
 			finalMap.put(key, innerMap);
 		}
-
-		/*
-		 * for (Map<String, Object> mapone : list) {
-		 * 
-		 * if (temp == null) { temp = getMap(mapone); } else {
-		 * temp.putAll(getMap(mapone));
-		 * 
-		 * } }
-		 */
 
 	}
 
